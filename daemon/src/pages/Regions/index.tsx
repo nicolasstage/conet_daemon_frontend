@@ -3,10 +3,21 @@ import { Regions } from "../../utils/regions";
 import "./index.css";
 import { useDaemonContext } from "../../providers/DaemonProvider";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { fetchGetAllRegions } from "../../API/getData";
 
 const Region = () => {
   const { setSRegion } = useDaemonContext();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getRegions = async () => {
+      const res = await fetchGetAllRegions();
+      console.log(res);
+    };
+
+    getRegions();
+  }, []);
 
   const auto = () => {
     setSRegion(Math.floor(Math.random() * Regions.length));
@@ -32,7 +43,7 @@ const Region = () => {
           <p className="location">Locations</p>
           {Regions.map((region, index) => {
             return (
-              <button onClick={() => handleRegion(index)}>
+              <button key={index} onClick={() => handleRegion(index)}>
                 <div>
                   <ReactCountryFlag
                     countryCode={region.code}
